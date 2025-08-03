@@ -130,16 +130,61 @@ jairus@LAPTOP-L6ESL8BI:~/picoCTF/pw_crack3$ python3 pass.py
 16026d60ff9b54410b3435b403afd226
 </pre>
 
-5. Paste hash on crackstation.net:
+5. Crask Hash (different ways)
+a . Paste hash on crackstation.net:
 <img width="1338" height="508" alt="image" src="https://github.com/user-attachments/assets/bcd79d4f-8f89-457f-b63d-50362d06e91f" />
 Password is: 2295
 
-6. Run `python3 level3.py` again and answer with the password:
+b. Use hashcat:
+
+i. Put the hash in a file `hash.txt`:
 <pre>
-  jairus@LAPTOP-L6ESL8BI:~/picoCTF/pw_crack3$ python3 level3.py
+jairus@LAPTOP-L6ESL8BI:~/picoCTF/pw_crack3$ echo "16026d60ff9b54410b3435b403afd226" > hash.txt
+</pre>
+
+ii. Make a custom wordlist with the provided possible passwords:
+<pre>
+echo -e "8799\nd3ab\n1ea2\nacaf\n2295\na9de\n6f3d" > list.txt
+</pre>
+
+iii. Run hashcat: `hashcat -m 0 -a 0 hash.txt list.txt` 
+
+-m means hashtype which is 0 (MD5) and -a means attack type which is 0 (Straight)
+<pre>
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 0 (MD5)
+Hash.Target......: 16026d60ff9b54410b3435b403afd226
+Time.Started.....: Sun Aug  3 22:24:45 2025 (0 secs)
+Time.Estimated...: Sun Aug  3 22:24:45 2025 (0 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File (list.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:     5972 H/s (0.00ms) @ Accel:256 Loops:1 Thr:1 Vec:16
+Recovered........: 1/1 (100.00%) Digests (total), 1/1 (100.00%) Digests (new)
+Progress.........: 7/7 (100.00%)
+Rejected.........: 0/7 (0.00%)
+Restore.Point....: 0/7 (0.00%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:0-1
+Candidate.Engine.: Device Generator
+Candidates.#1....: 8799 -> 6f3d
+Hardware.Mon.#1..: Util: 12%
+
+Started: Sun Aug  3 22:24:43 2025
+Stopped: Sun Aug  3 22:24:47 2025
+</pre>
+
+iv. Notice `Status...........: Cracked` which means the password has now been cracked by hashcat, run: `hashcat -m 0 -a 0 hash.txt list.txt --show`
+<pre>
+jairus@LAPTOP-L6ESL8BI:~/picoCTF/pw_crack3$ hashcat -m 0 -a 0 hash.txt list.txt --show
+16026d60ff9b54410b3435b403afd226:2295
+</pre>
+
+8. Run `python3 level3.py` again and answer with the password:
+<pre>
+jairus@LAPTOP-L6ESL8BI:~/picoCTF/pw_crack3$ python3 level3.py
 Please enter correct password for flag: 2295
 
 Welcome back... your flag, user:
-
-  picoCTF{m45h_fl1ng1ng_6f98a49f}
+picoCTF{m45h_fl1ng1ng_6f98a49f}
 </pre>
